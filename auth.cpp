@@ -62,7 +62,7 @@ void error(std::string message);
 std::string signature;
 bool initalized;
 
-void KeyAuth::api::init()
+void EpicAuth::api::init()
 {
 	LI_FN(CreateThread).get()(0, 0, (LPTHREAD_START_ROUTINE)modify, 0, 0, 0);
 
@@ -96,7 +96,7 @@ void KeyAuth::api::init()
 
 	auto response = req(data, url);
 
-	if (response == XorStr("KeyAuth_Invalid")) {
+	if (response == XorStr("EpicAuth_Invalid")) {
 		LI_FN(MessageBoxA).get()(0, XorStr("Application not found. Please copy strings directly from dashboard.").c_str(), NULL, MB_ICONERROR);
 		LI_FN(exit)(0);
 	}
@@ -162,7 +162,7 @@ static size_t header_callback(char* buffer, size_t size, size_t nitems, void* us
 	return nitems * size;
 }
 
-void KeyAuth::api::login(std::string username, std::string password)
+void EpicAuth::api::login(std::string username, std::string password)
 {
 	std::string hwid = utils::get_hwid();
 	auto data =
@@ -200,7 +200,7 @@ void KeyAuth::api::login(std::string username, std::string password)
 		load_user_data(json[(XorStr("info"))]);
 }
 
-void KeyAuth::api::web_login()
+void EpicAuth::api::web_login()
 {
 
 	// from https://perpetualprogrammers.wordpress.com/2016/05/22/the-http-server-api/
@@ -327,7 +327,7 @@ void KeyAuth::api::web_login()
 
 		going = false;
 
-		// keyauth request
+		// EpicAuth request
 		std::string hwid = utils::get_hwid();
 		auto data =
 			XorStr("type=login") +
@@ -379,7 +379,7 @@ void KeyAuth::api::web_login()
 			response.ReasonLength = (USHORT)strlen(response.pReason);
 			success = false;
 		}
-		// end keyauth request
+		// end EpicAuth request
 
 		response.Headers.KnownHeaders[HttpHeaderServer].pRawValue = XorStr("Apache/2.4.48 nginx/1.12.2").c_str(); // confuse anyone looking at server header
 		response.Headers.KnownHeaders[HttpHeaderServer].RawValueLength = 24;
@@ -428,7 +428,7 @@ void KeyAuth::api::web_login()
 	}
 }
 
-void KeyAuth::api::button(std::string button)
+void EpicAuth::api::button(std::string button)
 {
 
 	// from https://perpetualprogrammers.wordpress.com/2016/05/22/the-http-server-api/
@@ -556,7 +556,7 @@ void KeyAuth::api::button(std::string button)
 	}
 }
 
-void KeyAuth::api::regstr(std::string username, std::string password, std::string key) {
+void EpicAuth::api::regstr(std::string username, std::string password, std::string key) {
 	std::string hwid = utils::get_hwid();
 	auto data =
 		XorStr("type=register") +
@@ -594,7 +594,7 @@ void KeyAuth::api::regstr(std::string username, std::string password, std::strin
 		load_user_data(json[(XorStr("info"))]);
 }
 
-void KeyAuth::api::upgrade(std::string username, std::string key) {
+void EpicAuth::api::upgrade(std::string username, std::string key) {
 	auto data =
 		XorStr("type=upgrade") +
 		XorStr("&username=") + username +
@@ -628,7 +628,7 @@ void KeyAuth::api::upgrade(std::string username, std::string key) {
 	load_response_data(json);
 }
 
-void KeyAuth::api::license(std::string key) {
+void EpicAuth::api::license(std::string key) {
 	std::string hwid = utils::get_hwid();
 	auto data =
 		XorStr("type=license") +
@@ -664,7 +664,7 @@ void KeyAuth::api::license(std::string key) {
 		load_user_data(json[(XorStr("info"))]);
 }
 
-void KeyAuth::api::setvar(std::string var, std::string vardata) {
+void EpicAuth::api::setvar(std::string var, std::string vardata) {
 	auto data =
 		XorStr("type=setvar") +
 		XorStr("&var=") + var +
@@ -679,7 +679,7 @@ void KeyAuth::api::setvar(std::string var, std::string vardata) {
 
 void checkInit() {
 	if (!initalized) {
-		error("You need to run the KeyAuthApp.init(); function before any other KeyAuth functions");
+		error("You need to run the EpicAuthApp.init(); function before any other EpicAuth functions");
 	}
 }
 
@@ -688,7 +688,7 @@ void error(std::string message) {
 	__fastfail(0);
 }
 
-void KeyAuth::api::chatget(std::string channel)
+void EpicAuth::api::chatget(std::string channel)
 {
 	checkInit();
 
@@ -704,7 +704,7 @@ void KeyAuth::api::chatget(std::string channel)
 	load_channel_data(json);
 }
 
-bool KeyAuth::api::chatsend(std::string message, std::string channel)
+bool EpicAuth::api::chatsend(std::string message, std::string channel)
 {
 	checkInit();
 
@@ -723,7 +723,7 @@ bool KeyAuth::api::chatsend(std::string message, std::string channel)
 }
 
 
-std::string KeyAuth::api::getvar(std::string var) {
+std::string EpicAuth::api::getvar(std::string var) {
 
 	auto data =
 		XorStr("type=getvar") +
@@ -757,7 +757,7 @@ std::string KeyAuth::api::getvar(std::string var) {
 	return !json[(XorStr("response"))].is_null() ? json[(XorStr("response"))] : XorStr("");
 }
 
-void KeyAuth::api::ban(std::string reason) {
+void EpicAuth::api::ban(std::string reason) {
 
 	auto data =
 		XorStr("type=ban") +
@@ -790,7 +790,7 @@ void KeyAuth::api::ban(std::string reason) {
 	load_response_data(json);
 }
 
-bool KeyAuth::api::checkblack() {
+bool EpicAuth::api::checkblack() {
 	std::string hwid = utils::get_hwid();
 	auto data =
 		XorStr("type=checkblacklist") +
@@ -830,7 +830,7 @@ bool KeyAuth::api::checkblack() {
 	}
 }
 
-void KeyAuth::api::check() {
+void EpicAuth::api::check() {
 	auto data =
 		XorStr("type=check") +
 		XorStr("&sessionid=") + sessionid +
@@ -862,7 +862,7 @@ void KeyAuth::api::check() {
 	load_response_data(json);
 }
 
-std::string KeyAuth::api::var(std::string varid) {
+std::string EpicAuth::api::var(std::string varid) {
 	auto data =
 		XorStr("type=var") +
 		XorStr("&varid=") + varid +
@@ -895,7 +895,7 @@ std::string KeyAuth::api::var(std::string varid) {
 	return json[(XorStr("message"))];
 }
 
-void KeyAuth::api::log(std::string message) {
+void EpicAuth::api::log(std::string message) {
 
 	char acUserName[100];
 	DWORD nUserName = sizeof(acUserName);
@@ -913,7 +913,7 @@ void KeyAuth::api::log(std::string message) {
 	req(data, url);
 }
 
-std::vector<unsigned char> KeyAuth::api::download(std::string fileid) {
+std::vector<unsigned char> EpicAuth::api::download(std::string fileid) {
 	auto to_uc_vector = [](std::string value) {
 		return std::vector<unsigned char>(value.data(), value.data() + value.length() );
 	};
@@ -958,7 +958,7 @@ std::vector<unsigned char> KeyAuth::api::download(std::string fileid) {
 }
 
 
-std::string KeyAuth::api::webhook(std::string id, std::string params, std::string body, std::string contenttype)
+std::string EpicAuth::api::webhook(std::string id, std::string params, std::string body, std::string contenttype)
 {
 	auto data =
 		XorStr("type=webhook") +
@@ -1025,7 +1025,7 @@ std::string get_str_between_two_str(const std::string& s,
 		last_delim_pos - end_pos_of_first_delim);
 }
 
-std::string KeyAuth::api::req(std::string data, std::string url) {
+std::string EpicAuth::api::req(std::string data, std::string url) {
 	CURL* curl = curl_easy_init();
 	if (!curl)
 		return XorStr("null");
@@ -1037,7 +1037,7 @@ std::string KeyAuth::api::req(std::string data, std::string url) {
 
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1);
 
-	curl_easy_setopt(curl, CURLOPT_NOPROXY, XorStr( "keyauth.win" ) );
+	curl_easy_setopt(curl, CURLOPT_NOPROXY, XorStr( "EpicAuth.win" ) );
 
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
 

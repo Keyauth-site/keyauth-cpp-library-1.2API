@@ -11,7 +11,7 @@ struct channel_struct
 	std::string timestamp;
 };
 
-namespace KeyAuth {
+namespace EpicAuth {
 	class api {
 	public:
 
